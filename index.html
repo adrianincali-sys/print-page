@@ -1,28 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KITTING PACK LIST</title>
+    <title>Kitting Labels</title>
 
     <style>
         body {
             font-family: Arial;
-            padding: 20px;
+            margin: 0;
+            padding: 10mm;
         }
 
-        .box {
+        /* LABEL GRID */
+        #container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 labels across */
+            gap: 8mm;
+        }
+
+        /* INDIVIDUAL LABEL */
+        .label {
             border: 1px solid #000;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 8px;
+            height: 55mm;
+            width: 95mm;
+            box-sizing: border-box;
             page-break-inside: avoid;
+            font-size: 12px;
         }
 
+        .row {
+            margin-bottom: 4px;
+        }
+
+        .label strong {
+            display: inline-block;
+            width: 70px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10mm;
+        }
+
+        button {
+            margin-bottom: 10px;
+        }
+
+        /* PRINT SETTINGS */
         @media print {
             button {
                 display: none;
             }
 
-            .box {
-                page-break-after: always;
+            body {
+                padding: 0;
+            }
+
+            #container {
+                gap: 6mm;
+            }
+
+            .label {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -30,7 +69,7 @@
 
 <body>
 
-<h2>Print View</h2>
+<h2>KITTING RECEIPT LABELS</h2>
 
 <div id="container"></div>
 
@@ -38,14 +77,10 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-
-    // Get items parameter
     const itemsParam = params.get("items");
 
-    // Container
     const container = document.getElementById("container");
 
-    // Parse JSON list
     let items = [];
 
     try {
@@ -54,22 +89,21 @@
         console.error("Invalid JSON");
     }
 
-    // Generate boxes
     items.forEach(item => {
 
-        const box = document.createElement("div");
-        box.className = "box";
+        const label = document.createElement("div");
+        label.className = "label";
 
-        box.innerHTML = `
-            <div><strong>WO:</strong> ${item.won || ""}</div> <!--work order number for the item-->
-            <div><strong>Part:</strong> ${item.pn || ""}</div> <!--part number for the item-->
-            <div><strong>Desc.:</strong> ${item.desc || ""}</div> <!--description of the item-->
-            <div><strong>Location:</strong> ${item.loc || ""}</div> <!--location to be delivered to-->
-            <div><strong>QTY:</strong> ${item.qty || ""}</div> <!--quantity of the part-->
-            <div><strong>Date:</strong> ${item.date || ""}</div> <!--date ticket was printed-->
+        label.innerHTML = `
+            <div class="row"><strong>WO:</strong> ${item.won || ""}</div>
+            <div class="row"><strong>Part:</strong> ${item.pn || ""}</div>
+            <div class="row"><strong>Desc:</strong> ${item.desc || ""}</div>
+            <div class="row"><strong>Loc:</strong> ${item.loc || ""}</div>
+            <div class="row"><strong>Qty:</strong> ${item.qty || ""}</div>
+            <div class="row"><strong>Date:</strong> ${item.date || ""}</div>
         `;
 
-        container.appendChild(box);
+        container.appendChild(label);
     });
 </script>
 
