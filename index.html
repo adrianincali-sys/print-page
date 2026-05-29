@@ -70,10 +70,11 @@
             <div><strong>Location:</strong> ${item.loc || ""}</div> <!--location to be delivered to-->
             <div><strong>QTY:</strong> ${item.qty || ""}</div> <!--quantity of the part-->
             <div><strong>Date:</strong> ${item.date || ""}</div> <!--date ticket was printed-->
+            <svg class="barcode"></svg>
         `;
 
         container.appendChild(box);
-        const barcodeValue = item.won || item.pn || "";
+        const barcodeValue = item.pn;
 
 if (barcodeValue) {
     JsBarcode(box.querySelector(".barcode"), barcodeValue, {
@@ -88,6 +89,6 @@ if (barcodeValue) {
 }
     });
 </script>
-<h3>1.001</h3>
+<h3>1.002</h3>
 </body>
 </html>
